@@ -1,0 +1,82 @@
+|这个作业属于哪个课程|https://edu.cnblogs.com/campus/gdgy/SoftwareEngineering2024|
+|------------------|----------------------|
+|这个作业要求在哪里|https://edu.cnblogs.com/campus/gdgy/SoftwareEngineering2024/homework/13136|
+|这个作业的目标|深入了解开发流程PSP的具体内容，拥有基本的独立开发能力|
+###<span style="color:Navy">GitHub地址
+https://github.com/yjrrrrr/yjrrrr
+###<span style="color:Navy">论文查重算法应该包括以下步骤：
+1.文本预处理：这是算法的第一步，涉及到对文本的清洗、标准化和分词等操作。这一步的目的是去除无关的字符和格式，将文本转化为可供算法处理的数据结构。
+2.特征提取：在这一步中，算法会从经过预处理的文本中提取出各种特征，如关键词、短语、句子和段落等。这些特征将被用于后续的比较和匹配。以上可以利用Python中jieba库的强大功能辅助实现。
+3.相似度检测：在这一步中，本人选择了通过计算余弦相似度来比较新论文与已有文献的相似度。如果相似度过高，超过了预设的阈值，那么新论文就会被认为存在抄袭。
+4.结果输出：最后，算法会输出检测结果，即文章相似度。
+###<span style="color:Navy">所用接口
+#####<span style="color:Navy">re.match
+由于对比对象为中文或英文单词，因此应该对读取到的文件数据中存在的换行符\n、标点符号过滤掉，这里选择用正则表达式来匹配符合的数据。
+代码
+```python
+def processFile(fileStr):
+    fileStr = lcut(fileStr)
+    res = []
+    for tags in fileStr:
+        if (match(u"[a-zA-Z0-9\u4e00-\u9fa5]", tags)):
+            res.append(tags)
+    return res
+```
+#####<span style="color:Navy">jieba.lcut
+该接口将输入的文本按照词语进行分割，并返回一个包含所有词语的列表。
+代码
+```python
+def processFile(fileStr):
+    fileStr = lcut(fileStr)
+    res = []
+    for tags in fileStr:
+        if (match(u"[a-zA-Z0-9\u4e00-\u9fa5]", tags)):
+            res.append(tags)
+    return res
+```
+#####<span style="color:Navy">gensim.corpora. Dictionary
+利用该接口可以将分割好的词语生成词典。
+代码
+```python
+texts = [fileStr1, fileStr2]
+    dictionary = Dictionary(texts)
+```
+#####<span style="color:Navy">gensim.similarities.Similarity
+该接口可用于辅助计算相似度
+代码
+```python
+  similarity = Similarity('-Similarity-index', corpus, num_features=len(dictionary))
+    testCorpus = dictionary.doc2bow(fileStr1)
+    cosineSimilarity = similarity[testCorpus][1]
+    return cosineSimilarity
+```
+###<span style="color:Navy">异常处理说明
+当命令行参数传入文件路径时少于四个路径（即main.py、论文原件，抄袭论文，存有结果的文件）则报错。
+代码
+```python
+if len(argv) != 4:
+        raise ValueError('Please provide orig.txt orig_add.txt ans.txt')
+```
+###<span style="color:Navy">代码运行截图
+![](https://img2024.cnblogs.com/blog/3397512/202403/3397512-20240311204812999-187667208.png)
+
+|PSP2.1|Personal Software Process Stages|预估耗时（分钟）|实际耗时（分钟）|
+|------|------|------|------|
+|Planning|计划|20|15|
+|· Estimate|· 估计这个任务需要多少时间|20|15|
+|Development|开发|1240|1060|
+|· Analysis|· 需求分析 (包括学习新技术)|500|525|
+|· Design Spec|· 生成设计文档|60|55|
+|· Design Review|· 设计复审|30|15|
+|· Coding Standard|· 代码规范 (为目前的开发制定合适的规范)|20|5|
+|· Design|· 具体设计|60|20|
+|· Coding|· 具体编码|420|375|
+|· Code Review|· 代码复审|30|5|
+|· Test| · 测试（自我测试，修改代码，提交修改|120|60|
+|Reporting|报告|90|65|
+|· Test Repor|· 测试报告|30|20|
+|· Size Measurement|· 计算工作量|30|15|
+|· Postmortem & Process Improvement Plan|· 事后总结, 并提出过程改进计划|30|30|
+||· 合计|1350|1140|
+###<span style="color:Navy">心得体会
+在刚看到题目的时候其实是感受到了不小的压力的，因为Java，Python，C++都是我之前没有学习过的语言，所以根本不知道从哪里下手。于是我去向朋友寻求帮助，他建议我用Python来完成这个算法，于是我先开始学习有关Python的知识，然后在网上查阅了如何实现论文查重功能的资料，同时也在朋友的帮助下，一步一步完善代码。但是还没有进行有关代码覆盖率方面的测试，因为还没有来得及学习到这方面的知识，但也收获颇多。
